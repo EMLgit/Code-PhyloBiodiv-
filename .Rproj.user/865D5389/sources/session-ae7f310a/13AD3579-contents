@@ -1,0 +1,113 @@
+---
+title: 'Script 1: setup'
+author: "emlombardi"
+date: "2024-06-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Workshop Notes
+
+## Introduction to workshop
+This workshop is part of Botany 2024. It's a full day, single day work shop with [Ryan Folk](https://www.ryanafolk.com/)
+
+For reference if I want: here's the GitHub project on Dr. Folk's page from Botany 2024's version of this workshop
+[GitHub site](https://github.com/ryanafolk/Botany2024) 
+
+
+#Topical coverage for the workshop
+Integrating different sources of data, multiple different types of data. Goal is to inspire new ideas for our research, showcase new methods and applications of biodiversity research. 
+-Apparently the wikipedia page on 'data wrangling' is pretty good and we should check it out
+-Ryan Folk says: canned scripts and packages don't work (spam can example)
+
+EXAMPLE from Ryan Folk:
+GC-MS data for floral volatiles in a phylogenetic context. You need to associate your chemical data with species data
+He ultimately took his raw CSVs with chemical data to make it look like a community matrix, and then analyzed Bray-Curtis
+
+
+## Module: Macroevolution
+-What do we mean by macroevolution? Clade-level processes, or anything above the species level
+-e.g. evolutionary radiations, extinctions, comparative taxonomic trends, etc. 
+-some processes that are often studied in macroevolution: speciation, extinction, character change, trait/environment interactions
+-how can we go from data points to vertices/lines that define trends in the data? Interesting way to think of it
+-Phylogenies are a fundamental part of macroevolutionary research b/c it's the comparative framework for organizing relationships
+-Often, phylogenies ARE the historical information that we can use to test a hypothesis! 
+
+Basically, this first module covers some of the foundational issues that you need in order to connect traits, environment and phylogeny
+
+###Step 1: Trees
+-usually Newick or Nexus
+-Always with branch lengths
+-Most of the time we're dealing with time trees...ideally the tree is ultrametric (tips all line up with the present). 
+-You don't always get ultrametric trees from your first go; you need to do an extra step
+-If you're using publically available data, the sampling is super important. Coverage and distribution of sampled species across the tree (ideally evenly distributed across the tree, very complete if you can swing it)
+-Environmental data: are you going to sites? are you using indirect information? you probs need solid geographic coordinates
+
+###Step 2: Environmental Data
+-Occurrence records with geocoordinates 
+-You can use herbarium specimens, online repositories, published literature to locate records that will...hopefully...help you figure out the environment you're working in
+
+-Cool thing: Kew's species range records (i.e. expert curated species 'botanical countries') that can be used to check your results
+-WorldClim2 is still the 'one stop shop' for high res spatial environmental data (it is interpolated data; not direct observations)
+-Format is usually in GeoTIFF 
+-ISRIC world soil information (soil grids, land cover, elevation, etc). Note that the soil grid is also interpolated, but the 250 meter resolution is pretty accurate (probs depends on where you're looking though...). Also it's global which is very cool. 
+
+####Question Prompt:
+-How do we turn spatial records into environmental data? Extract environmental data from coordinates. 
+-Some comparative methods allow you to calculate species averages, etc. niches, etc. 
+Generally in custom python or r 
+
+### Step 3: Trait data
+-traits are central to how we think about macroevolution because traits are what selection operates on
+-ex: polyploidy
+-where do you get trait data? It's less straight forward than environmental data. 
+-sometimes you might measure specimens, plants, etc. 
+-TRY or GIFT databases...but these are places from which you can start (but you'll probs need to go farther on your onw)
+-CCDB, genome size database (for Kew)
+-published literature (floras, monographs, etc.)
+-Take a look at FloraTraiter paper and program (automated parsing of traits from descriptive biodiversity literature)
+
+
+### Step 4: Do stuff (what can you do with all the different data sources discussed)
+-you can ask a bunch of questions like: is a certain trait related to changes in diversification rates? Are certain environmental conditions related to shifts in diversification? 
+-Diversification primer: what are diversification rates? In this context we mean rates at which new species form/disappear (usually on net...speciation minus extinction)
+-Originally estimated directly from fossil time series (but few fossils have enough paleo data for that)
+-Diversification rates are dependen ton sampling (compelteness of tree) and branch lengths
+-Methods=BAMM and RevBayes, test trait-associated diversification (BAMM/RevBayes, SSE-type models, semi-parametric tests)
+-Hwo do SSE models work? character state dependend speciation and extinction parameter (lambda), and you allow a binary trait (ie allos change from blue to red flowers), and you use these inputs to predict diversification
+---there are a bunch of SSE iterations that depend on your type of data, but start with HiSSE (hidden-state speciation and extinction) 
+
+You can also try to fit an evolutionary model for a given trait:
+-Use phytools and calculate parameters for an evolutionary model (random drift, stabilizing selection, etc). Basically you have a 'starting state' that is the ancestral state, and a parameter for plasticity/lability of the trait
+-Often folks jump strait to ancestral reconstruction for the tree...but you do want to look at lability of your trait
+
+You could also correlate multiple variables (e.g. floral tube length related to nectar production, etc)
+-is root paraistism related to drier habitats, for example
+
+
+
+```{r libraries}
+install.packages("phytools")
+install.packages("geiger")
+#install.packages("ggplot2")
+install.packages("phangorn")
+install.packages("diversitree")
+install.packages("dplyr")
+install.packages("caper")
+install.packages("phyr")
+
+
+#Load 'em
+library(phytools)
+library(geiger)
+library(ggplot2)
+library(phangorn)
+library(diversitree)
+library(dplyr)
+library(caper)
+library(phyr)
+
+```
