@@ -1,0 +1,9 @@
+"0","tree <- read.tree(""workshop.tree.tre"")
+"
+"2","Warning in file(file, ""r"") :"
+"2","
+ "
+"2"," cannot open file 'workshop.tree.tre': No such file or directory
+"
+"2","Error in file(file, ""r"") : cannot open the connection
+"

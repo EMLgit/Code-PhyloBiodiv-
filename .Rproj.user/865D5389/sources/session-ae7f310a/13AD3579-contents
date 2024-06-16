@@ -86,13 +86,24 @@ You can also try to fit an evolutionary model for a given trait:
 
 You could also correlate multiple variables (e.g. floral tube length related to nectar production, etc)
 -is root paraistism related to drier habitats, for example
+-PGLS is a modificaiton fo traditional generalized least squared (assumes clsoelly related species will have more similar values under brownian evolution)
+- R package caper is a good way to do this; response variables needs to be a continuous trait, but the predictive variables can be binary or continuous
+
+
+#Get into the coding bit!
+
+```{r}
+#First we need to change the directory to the cloned GitHub repo
+setwd("/Users/elizabethlombardi/Desktop/Research/PhyloBiodiv Data Wrangling Workshop/Botany2024/macroevolution")
+
+```
 
 
 
 ```{r libraries}
 install.packages("phytools")
 install.packages("geiger")
-#install.packages("ggplot2")
+install.packages("ggplot2")
 install.packages("phangorn")
 install.packages("diversitree")
 install.packages("dplyr")
@@ -111,3 +122,55 @@ library(caper)
 library(phyr)
 
 ```
+
+
+#Read in the tree
+Phytools blog is super helpful for any fancy tree revision stuff
+
+```{r}
+tree <- read.tree("workshop.tree.tre")
+
+#just go to the workshop.R script
+
+```
+
+## Notes on that code:
+#Regex and character revision notes (also previous chunk notes)
+-It's great in R to use gsub() for regex editing; it's base R. We're doing it to get rid of NGS plate data at the end of 'tree$tip.label'
+
+#Diversification Rates
+-run the DR_statistic() function (it's a recursive algorithm that's already been tested so just run it)
+-next you run tree through that
+
+#When merge() ing your data, make sure you have up-to-date taxonomic info (i.e. harmonize the input strings that you use to merge)
+
+-treedata() from the geiger package is super important. It matches the trait data to the tree; but can be finicky
+
+
+
+### New Talk: Notes
+# Dr. Daijiang Li **future collaborator?**
+#Phylogenetic community ecology
+
+Why use phylogenies in community ecology? They can be surrogates for missing trait data
+Even if relevant traits are unknown, related species should have similar trait values
+-very cool example of basic binary dry/wet tolerant species in dry/wet sites. You get a tree plus heatmat thing, that visually shows there are different patterns in site and that the species cluster in wet versus dry. Good exmaple of spatial phylogenetics. 
+-Outline for his talk: Phylogenetic diversity and Phylogenetic Generalized Linear Mixed Models (PGLMMs) 
+***PGLMMs is probably kinda what I would want to do with the NM biodiversity dataset for conservation purposes, or something. You can add environmental conditions into the analyses with this
+-Example: he surveyed populations of plants in communities across wisconsin. Smaller number of taxa and not a lot of traits. 
+-What are some common metrics: review paper Tucker et al 2016 Biological Reviews
+-***beta diversity is what I'm likely to be more interested in for the NM biodiv stuff
+-Effective number of species given phylogenetic balance and abundance evenness is important, he recommends Hill numbers
+-Ultimate hypothetical plots are basically: Diversity values on the y-axis and enviornmental variables on the x-axis. This way we can kinda see how phylogenetic diversity is organized across space and time
+-VcV is variance-covariance matrix
+
+
+#NEXT UP: coding again. 
+#go to 'phylo_comm_ecol.R' script to walk through the script. Notes here as we go, as needed. 
+Fascinating fact: ggplot and many statistical models use long format; vegan and picante use wide format 
+
+
+
+
+
+
